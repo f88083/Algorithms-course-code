@@ -4,12 +4,15 @@
  *  Last modified:     2023/9/30
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private Percolation zone;
     private double[] fractionTotal; // sum of (open sites / total sites)
+
+    private final int trials;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -18,6 +21,7 @@ public class PercolationStats {
         }
 
         this.fractionTotal = new double[trials];
+        this.trials = trials;
 
         zone = new Percolation(2); // Init. a grid zone for the experiment
 
@@ -50,12 +54,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return 0.0;
+        return mean() - ((1.96 * stddev()) / Math.sqrt(trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return 0.0;
+        return mean() + ((1.96 * stddev()) / Math.sqrt(trials));
     }
 
     // test client (see below)
@@ -66,8 +70,9 @@ public class PercolationStats {
         // Init. experiment
         PercolationStats exp = new PercolationStats(n, trials);
 
-        System.out.println("mean = " + exp.mean());
-        System.out.println("stddev = " + exp.stddev());
-
+        String confidence = exp.confidenceLo() + ", " + exp.confidenceHi();
+        StdOut.println("mean                    = " + exp.mean());
+        StdOut.println("stddev                  = " + exp.stddev());
+        StdOut.println("95% confidence interval = " + confidence);
     }
 }
