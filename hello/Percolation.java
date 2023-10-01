@@ -34,13 +34,20 @@ public class Percolation {
     public void open(int row, int col) {
         checkBound(row, col); // Check if exceeded boundary
         int currCellIndex = indexOf(row, col); // Get current index of the cell
+
+        // Check if opened
+        if (!grid[currCellIndex]) {
+            this.openCellCount++; // Increase open cell count
+        }
+
         grid[currCellIndex] = true; // Open it
-        this.openCellCount++; // Increase open cell count
+
         // Union the cell with the top
         if (row == 1) {
             gridMap.union(currCellIndex, top);
         }
-        else if (row == this.size) { // Union the cell with the bottom
+
+        if (row == this.size) { // Union the cell with the bottom
             gridMap.union(currCellIndex, bottom);
         }
 
@@ -109,6 +116,9 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
+        Percolation test = new Percolation(1);
+        test.open(1, 1);
+        System.out.println(test.percolates());
 
     }
 }

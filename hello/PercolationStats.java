@@ -9,10 +9,10 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private Percolation zone;
+    private static final double CONFIDENCE_95 = 1.96;
     private double[] fractionTotal; // sum of (open sites / total sites)
-
     private final int trials;
+
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -23,7 +23,9 @@ public class PercolationStats {
         this.fractionTotal = new double[trials];
         this.trials = trials;
 
-        zone = new Percolation(2); // Init. a grid zone for the experiment
+        Percolation zone;
+
+        // zone = new Percolation(2); // Init. a grid zone for the experiment
 
         // Start the experiment
         for (int i = 0; i < trials; i++) {
@@ -54,12 +56,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return mean() - ((1.96 * stddev()) / Math.sqrt(trials));
+        return mean() - ((CONFIDENCE_95 * stddev()) / Math.sqrt(trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return mean() + ((1.96 * stddev()) / Math.sqrt(trials));
+        return mean() + ((CONFIDENCE_95 * stddev()) / Math.sqrt(trials));
     }
 
     // test client (see below)
@@ -70,7 +72,7 @@ public class PercolationStats {
         // Init. experiment
         PercolationStats exp = new PercolationStats(n, trials);
 
-        String confidence = exp.confidenceLo() + ", " + exp.confidenceHi();
+        String confidence = "[" + exp.confidenceLo() + ", " + exp.confidenceHi() + "]";
         StdOut.println("mean                    = " + exp.mean());
         StdOut.println("stddev                  = " + exp.stddev());
         StdOut.println("95% confidence interval = " + confidence);
