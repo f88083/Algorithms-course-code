@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
  * */
 
 public class Deque<Item> implements Iterable<Item> {
-    private Item item;
     private int n;          // size of the deque
     private Node head;     // top of deque
     private Node tail;       // end of deque
@@ -46,11 +45,19 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        /* Swap head from old to new*/
-        Node oldHead = head;
-        head = new Node();
-        head.item = item;
-        head.next = oldHead;
+        if (n >= 1) {
+            /* Swap head from old to new*/
+            Node oldHead = head;
+            head = new Node();
+            head.item = item;
+            head.next = oldHead;
+            oldHead.previous = head; // Second node link to the head node
+        }
+        else { // When n = 0
+            Node newHead = new Node();
+            newHead.item = item;
+            head = newHead;
+        }
         n++; // Increase size
     }
 
@@ -59,21 +66,34 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) throw new IllegalArgumentException();
         Node newTail = new Node();
         newTail.item = item;
-        tail.next = newTail; // Add new item and append
-        tail = tail.next; // Swap the tail node, now the tail is the new tail
-        tail.next = null; // Next node of the tail is null
+        if (n >= 1) {
+            tail.next = newTail; // Add new item and append
+            newTail.previous = tail; // Link original tail to newTail's previous node
+            tail = tail.next; // Swap the tail node, now the tail is the new tail
+            tail.next = null; // Next node of the tail is null
+        }
+        else {
+            tail = newTail;
+        }
         n++;
     }
 
     // remove and return the item from the front
     public Item removeFirst() {
         if (isEmpty()) throw new NoSuchElementException();
+        Item item = head.item; // Prepare return item
+        head = head.next; // Point to the next node of the head
+        if (n >= 2) head.previous = null; // Unlink the link to the original head node
+        n--;
         return item;
     }
 
     // remove and return the item from the back
     public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException();
+        Item item = tail.item; // Prepare return item
+        tail = tail.previous; // Previous node as the new tail
+        tail.next = null; // Unlink the link to the original tail node
         return item;
     }
 
@@ -91,7 +111,7 @@ public class Deque<Item> implements Iterable<Item> {
         public Item next() {
             // TODO: Implementation
             if (!hasNext()) throw new NoSuchElementException();
-            return item;
+            return head.item; // FIXME
         }
 
         public void remove() {
@@ -99,14 +119,25 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
-    // unit testing (required)
-    public static void main(String[] args) {
-
-    }
-
-    // Linked-List helper inner class
     private class Node {
         private Item item;
         private Node next;
+        private Node previous;
     }
+
+    // unit testing (required)
+    public static void main(String[] args) {
+        Deque<Integer> q = new Deque<>();
+        q.addFirst(1);
+        q.addFirst(2);
+        q.removeFirst();
+        /* FIXME: removeLast might cause the problem, when there is
+         *  only 1 element last, should combine head and tail
+         * */
+        q.addLast(1);
+        System.out.println(q.size());
+    }
+
+    // Linked-List helper inner class
+
 }
