@@ -45,20 +45,27 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        if (n >= 1) {
-            /* Swap head from old to new*/
-            Node oldHead = head;
-            head = new Node();
-            head.item = item;
-            head.next = oldHead;
-            oldHead.previous = head; // Second node link to the head node
+        // New node with the item
+        Node newNode = new Node();
+        newNode.item = item;
+        if (n == 0) {
+            // Point to the same single node
+            head = newNode;
+            tail = newNode;
         }
-        else { // When n = 0
-            Node newHead = new Node();
-            newHead.item = item;
-            head = newHead;
+        else if (n == 1) {
+            head = newNode; // Add and point to the new item
+            head.next = tail; // Link the head to the tail
+            // Tail's pointer does not change
+            tail.previous = head; // Link the tail to the head
         }
-        n++; // Increase size
+        else { // When n >= 2
+            Node prevHeadNode = head; // Previous head node
+            head = newNode; // Add and point to the new item
+            head.next = prevHeadNode; // Link to the previous head
+            prevHeadNode.previous = head; // Link to the new head
+        }
+        ++n;
     }
 
     // add the item to the back
