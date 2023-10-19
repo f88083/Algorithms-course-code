@@ -10,6 +10,8 @@
  * In particular, do not use either java.util.LinkedList or java.util.ArrayList.
  */
 
+import edu.princeton.cs.algs4.StdOut;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -71,16 +73,24 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the back
     public void addLast(Item item) {
         if (item == null) throw new IllegalArgumentException();
-        Node newTail = new Node();
-        newTail.item = item;
-        if (n >= 1) {
-            tail.next = newTail; // Add new item and append
-            newTail.previous = tail; // Link original tail to newTail's previous node
-            tail = tail.next; // Swap the tail node, now the tail is the new tail
-            tail.next = null; // Next node of the tail is null
+        Node newNode = new Node();
+        newNode.item = item;
+        if (n == 0) {
+            // Point to the same single node
+            head = newNode;
+            tail = newNode;
         }
-        else {
-            tail = newTail;
+        else if (n == 1) {
+            tail = newNode; // Add and point to the new item
+            head.next = tail; // Link the head to the tail
+            // head's pointer does not change
+            tail.previous = head; // Link the tail to the head
+        }
+        else { // When n >= 2
+            Node prevTailNode = tail; // Previous tail node
+            tail = newNode; // Add and point to the new item
+            tail.previous = prevTailNode; // Link to the previous tail
+            prevTailNode.next = tail; // Link to the new tail
         }
         n++;
     }
@@ -126,25 +136,26 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
+
+    // unit testing (required)
+    public static void main(String[] args) {
+        Deque<Integer> q = new Deque<>();
+        /* Add First */
+
+        q.addLast(4);
+        q.addFirst(1);
+        q.addFirst(2);
+        q.addFirst(3);
+        StdOut.println(q.size());
+        StdOut.println("head: " + q.head.item);
+        StdOut.println("tail: " + q.tail.item);
+
+    }
+
+    // Linked-List helper inner class
     private class Node {
         private Item item;
         private Node next;
         private Node previous;
     }
-
-    // unit testing (required)
-    public static void main(String[] args) {
-        Deque<Integer> q = new Deque<>();
-        q.addFirst(1);
-        q.addFirst(2);
-        q.removeFirst();
-        /* FIXME: removeLast might cause the problem, when there is
-         *  only 1 element last, should combine head and tail
-         * */
-        q.addLast(1);
-        System.out.println(q.size());
-    }
-
-    // Linked-List helper inner class
-
 }
