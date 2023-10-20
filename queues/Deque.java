@@ -120,15 +120,17 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     private class DequeIterator implements Iterator<Item> {
+        private Node currNode = head;
+
         public boolean hasNext() {
-            // TODO: Implementation
-            return true;
+            return currNode.next != null;
         }
 
         public Item next() {
-            // TODO: Implementation
             if (!hasNext()) throw new NoSuchElementException();
-            return head.item; // FIXME
+            Item item = currNode.item;
+            currNode = currNode.next;
+            return item;
         }
 
         public void remove() {
@@ -149,6 +151,11 @@ public class Deque<Item> implements Iterable<Item> {
         StdOut.println(q.size());
         StdOut.println("head: " + q.head.item);
         StdOut.println("tail: " + q.tail.item);
+        StdOut.println("is Empty: " + q.isEmpty());
+        // Iterate
+        for (int num : q) {
+            StdOut.println(num);
+        }
 
     }
 
