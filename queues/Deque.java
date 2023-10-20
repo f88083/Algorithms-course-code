@@ -121,10 +121,21 @@ public class Deque<Item> implements Iterable<Item> {
     // remove and return the item from the back
     public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException();
-        Item item = tail.item; // Prepare return item
-        tail = tail.previous; // Previous node as the new tail
-        tail.next = null; // Unlink the link to the original tail node
-        return item;
+        Item tailItem = tail.item; // Prepare return item
+        if (n == 1) {
+            head = null;
+            tail = null;
+        }
+        else if (n == 2) {
+            head.next = null; // Remove next item
+            tail = tail.previous; // Point to the previous node
+        }
+        else {
+            tail = tail.previous;
+            tail.next = null;
+        }
+        --n;
+        return tailItem;
     }
 
     // return an iterator over items in order from front to back
@@ -160,19 +171,18 @@ public class Deque<Item> implements Iterable<Item> {
         q.addLast(4);
         q.addLast(1);
         q.addFirst(2);
-        // q.addFirst(3);
+        q.addFirst(3);
+        q.removeFirst();
+        q.removeLast();
+        q.removeFirst();
+        q.removeLast();
+        q.addFirst(11);
         StdOut.println(q.size());
-        StdOut.println("head: " + q.head.item);
-        StdOut.println("tail: " + q.tail.item);
-        StdOut.println("is Empty: " + q.isEmpty());
-
-        for (int i = 0; i < 3; i++) {
-            StdOut.println("REMOVED: " + q.removeFirst());
+        if (!q.isEmpty()) {
+            StdOut.println("head: " + q.head.item);
+            StdOut.println("tail: " + q.tail.item);
+            StdOut.println("is Empty: " + q.isEmpty());
         }
-
-        q.addLast(1);
-        q.addLast(2);
-
         StdOut.println("----------------------PRINTING----------------------");
         // Iterate
         for (int num : q) {
