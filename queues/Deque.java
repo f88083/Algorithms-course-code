@@ -123,7 +123,7 @@ public class Deque<Item> implements Iterable<Item> {
         private Node currNode = head;
 
         public boolean hasNext() {
-            return currNode.next != null;
+            return currNode != null;
         }
 
         public Item next() {
@@ -145,13 +145,14 @@ public class Deque<Item> implements Iterable<Item> {
         /* Add First */
 
         q.addLast(4);
-        q.addFirst(1);
+        q.addLast(1);
         q.addFirst(2);
         q.addFirst(3);
         StdOut.println(q.size());
         StdOut.println("head: " + q.head.item);
         StdOut.println("tail: " + q.tail.item);
         StdOut.println("is Empty: " + q.isEmpty());
+
         // Iterate
         for (int num : q) {
             StdOut.println(num);
