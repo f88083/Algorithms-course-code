@@ -1,9 +1,11 @@
 /* *****************************************************************************
- *  Name:
- *  Date:
- *  Description:
+ *  Name:              Shih-Che, Lai
+ *  Coursera User ID:  123456
+ *  Last modified:     2023/10/7
  **************************************************************************** */
 
+
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
@@ -65,6 +67,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         a[rand] = a[n - 1];
         // Remove the last item
         a[n - 1] = null;
+        // Resize the length of the array
+        if (n == a.length / 4) {
+            resize(a.length / 2);
+        }
         // Shrink the size
         --n;
         return ret;
@@ -125,28 +131,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        // Test enqueue
-        RandomizedQueue<Integer> q = new RandomizedQueue<>();
-
-        System.out.println("q empty? " + q.isEmpty());
-
-        for (int i = 0; i < 8; i++) {
-            q.enqueue(i);
-        }
-
-        // for (int i = 0; i < 7; i++) {
-        //     System.out.println("Removed: " + q.dequeue());
-        // }
-
-        System.out.println("q size? " + q.size());
-        System.out.println("---------");
-        // Print the items
-        for (int a : q) {
-            System.out.println(a);
-        }
-        System.out.println();
-        for (int b : q) {
-            System.out.println(b);
+        int n = 5;
+        RandomizedQueue<Integer> queue = new RandomizedQueue<Integer>();
+        for (int i = 0; i < n; i++)
+            queue.enqueue(i);
+        for (int a : queue) {
+            for (int b : queue)
+                StdOut.print(a + "-" + b + " ");
+            StdOut.println();
         }
 
 
