@@ -86,10 +86,12 @@ public class Point implements Comparable<Point> {
      */
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
-        if (this.x < that.x) return -1;
         if (this.y < that.y) return -1;
+        if (this.y == that.y && this.x < that.x) return -1;
+        // Equal
+        if (this.x == that.x && this.y == that.y) return 0;
         // FIXME
-        return 0;
+        return 1;
     }
 
     /**
@@ -102,8 +104,8 @@ public class Point implements Comparable<Point> {
         // FIXME
         /* YOUR CODE HERE */
         return new Comparator<Point>() {
-            public int compare(Point o1, Point o2) {
-                return 0;
+            public int compare(Point p1, Point p2) {
+                return p1.compareTo(p2);
             }
         };
     }
@@ -133,5 +135,9 @@ public class Point implements Comparable<Point> {
         System.out.println("slope from a to b: " + a.slopeTo(b));
         System.out.println("slope from b to c: " + b.slopeTo(c));
         System.out.println("slope to itself: " + a.slopeTo(a));
+
+        System.out.println("a compare b: " + a.compareTo(b));
+        System.out.println("b compare c: " + b.compareTo(c));
+        System.out.println("compare itself: " + a.compareTo(a));
     }
 }
