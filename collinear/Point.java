@@ -49,7 +49,7 @@ public class Point implements Comparable<Point> {
     }
 
     /**
-     * Returns the slope between this point and the specified point.
+     * Returns tehe slope betwen this point and the specified point.
      * Formally, if the two points are (x0, y0) and (x1, y1), then the slope
      * is (y1 - y0) / (x1 - x0). For completeness, the slope is defined to be
      * +0.0 if the line segment connecting the two points is horizontal;
@@ -61,8 +61,15 @@ public class Point implements Comparable<Point> {
      */
     public double slopeTo(Point that) {
         /* YOUR CODE HERE */
-        
-        return 0.0;
+
+        // Vertical
+        if (this.x == that.x && this.y != that.y) return Double.POSITIVE_INFINITY;
+            // Horizontal
+        else if (this.y == that.y && this.x != that.x) return 0.0;
+            // Same postion
+        else if (this.x == that.x && this.y == that.y) return Double.NEGATIVE_INFINITY;
+
+        return (that.y - this.y) / (that.x - this.x);
     }
 
     /**
@@ -119,5 +126,12 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
+        Point a = new Point(3, 2);
+        Point b = new Point(3, 4);
+        Point c = new Point(7, 4);
+
+        System.out.println("slope from a to b: " + a.slopeTo(b));
+        System.out.println("slope from b to c: " + b.slopeTo(c));
+        System.out.println("slope to itself: " + a.slopeTo(a));
     }
 }
